@@ -6,26 +6,21 @@ import sys
 
 def align(rem_short, rem_long, limit):
     if rem_short == 1:
-        return [rem_long]
+        return [[rem_long]]
 
-    min_map_cnt = max([0, int(math.ceil(rem_long/(rem_short-1)) - limit)])
+    min_map_cnt = max([0, rem_long-(rem_short-1)*limit])
     max_map_cnt = min([limit, rem_long])
 
     out = []
     for m in xrange(min_map_cnt, max_map_cnt+1):
         a = align(rem_short-1, rem_long-m, limit)
-        if isinstance(a[0], list):
-            out += [[m] + x for x in a]
-        else:
-            out += [[m] + [x] for x in a]
+        out += [[m] + x for x in a]
     return out
-
 
 
 def gen_legal_alignments(seq1, seq2, max_sub_size = 3):
     if (len(seq2) - len(seq1)) / len(seq1) > max_sub_size-1:
         return None
-
     if len(seq1) == 1:                
         return [(seq1, [' '.join(seq2)])]
 
@@ -42,7 +37,6 @@ def gen_legal_alignments(seq1, seq2, max_sub_size = 3):
             aligned_seq += [sub_seq2]
             idx += al_ix_list[i]
         alignments += [(seq1,aligned_seq)]
-    
     return alignments
 
 def convert_to_str(list_val):
